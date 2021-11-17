@@ -4,17 +4,15 @@
 
 ## REST API:
 ```
-/signup                                              POST
-/signin                                              POST
+/signup                                      POST
+/login                                       POST
 
-/profile/{email}                                     GET, PUT
-/profile/{email}/posts                               GET, POST
-/profile/{email}/posts/{postId}                      GET, PUT
-/profile/{email}/posts/{postId}/comments             GET, POST
-/profile/{email}/posts/{postId}/comments/{commentId} GET, PUT
+/profile                                     GET
+/profile/posts                               GET
+/profile/posts/{postId}/comments             GET
 
-/feed                                                GET
-/feed/{postId}                                       GET
-/feed/{postId}/comments                              GET
-/feed/{postId}/comments/{commentId}                  GET
+/posts                                       GET, POST
+/posts/{postId}                              GET, PUT
+/posts/{postId}/comments                     GET, POST
+/posts/{postId}/comments/{commentId}         GET, PUT
 ```
