@@ -8,21 +8,18 @@ import org.http4s.{EntityDecoder, EntityEncoder}
 import org.http4s.circe.{jsonEncoderOf, jsonOf}
 
 
-case class User(id: UserId, email: String, name: String, active: Boolean)
+case class User(id: UserId, email: String, name: String, password: String, active: Boolean)
 
 object User {
+
   final case class UserId(id: Int) extends AnyVal
-  
-  object UserId {
-    def fromString(idStr: String) = UserId(Integer.parseInt(idStr))
-  }
 
   implicit lazy val userIdDecoder: Decoder[UserId] = deriveDecoder
-  implicit val userDecoder: Decoder[User] = deriveDecoder[User]
+  implicit val userDecoder: Decoder[User] = deriveDecoder
   implicit def userEntityDecoder[F[_]: Sync]: EntityDecoder[F, User] =
     jsonOf
   implicit lazy val userIdEncoder: Encoder[UserId] = deriveEncoder
-  implicit val userEncoder: Encoder[User] = deriveEncoder[User]
+  implicit val userEncoder: Encoder[User] = deriveEncoder
   implicit def userEntityEncoder[F[_]]: EntityEncoder[F, User] =
     jsonEncoderOf
 

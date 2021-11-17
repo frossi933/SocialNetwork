@@ -11,9 +11,10 @@ import org.http4s.{EntityDecoder, EntityEncoder}
 import java.time.Instant
 
 
-case class Post(id: PostId, authorId: UserId, text: Option[String], image: Option[String], timestamp: Instant)
+case class Post(id: PostId, authorId: UserId, text: Option[String], image: Array[Byte], timestamp: Instant)
 
 object Post {
+
   final case class PostId(id: Int) extends AnyVal
 
   import com.social.network.model.User.{userIdDecoder, userIdEncoder}

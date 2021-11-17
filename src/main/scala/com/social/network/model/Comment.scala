@@ -15,6 +15,7 @@ import java.time.Instant
 case class Comment(id: CommentId, postId: PostId, authorId: UserId, text: String, timestamp: Instant)
 
 object Comment {
+
   final case class CommentId(id: Int) extends AnyVal
 
   import com.social.network.model.User.{userIdDecoder, userIdEncoder}
