@@ -4,6 +4,8 @@ val LogbackVersion = "1.2.5"
 val DoobieVersion = "0.13.4"
 val KindProjectorVersion = "0.13.0"
 val BetterMonadicForVersion = "0.3.1"
+val CryptoBitsVersion = "1.3"
+val ScalaCompressVersion = "1.0.0"
 
 lazy val root = (project in file("."))
   .settings(
@@ -12,13 +14,15 @@ lazy val root = (project in file("."))
     version := "0.0.1-SNAPSHOT",
     scalaVersion := "2.13.6",
     libraryDependencies ++= Seq(
-      "org.http4s"      %% "http4s-blaze-server" % Http4sVersion,
-      "org.http4s"      %% "http4s-circe"        % Http4sVersion,
-      "org.http4s"      %% "http4s-dsl"          % Http4sVersion,
-      "io.circe"        %% "circe-generic"       % CirceVersion,
-      "ch.qos.logback"  %  "logback-classic"     % LogbackVersion,
-      "org.tpolecat"    %% "doobie-core"         % DoobieVersion,
-      "org.tpolecat"    %% "doobie-postgres"     % DoobieVersion
+      "org.http4s"         %% "http4s-blaze-server" % Http4sVersion,
+      "org.http4s"         %% "http4s-circe"        % Http4sVersion,
+      "org.http4s"         %% "http4s-dsl"          % Http4sVersion,
+      "io.circe"           %% "circe-generic"       % CirceVersion,
+      "ch.qos.logback"     %  "logback-classic"     % LogbackVersion,
+      "org.tpolecat"       %% "doobie-core"         % DoobieVersion,
+      "org.tpolecat"       %% "doobie-postgres"     % DoobieVersion,
+      "org.reactormonk"    %% "cryptobits"          % CryptoBitsVersion,
+      "com.github.gekomad" %% "scala-compress"      % ScalaCompressVersion
     ),
     addCompilerPlugin("org.typelevel"   %% "kind-projector"     % KindProjectorVersion cross CrossVersion.full),
     addCompilerPlugin("com.olegpy"      %% "better-monadic-for" % BetterMonadicForVersion),
