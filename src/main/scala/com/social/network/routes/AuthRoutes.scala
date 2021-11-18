@@ -4,7 +4,7 @@ import cats.Applicative
 import cats.data.{Kleisli, OptionT}
 import cats.effect.Sync
 import cats.implicits._
-import com.social.network.model.UserDTO
+import com.social.network.dto.UserDTO
 import com.social.network.requests.{LoginRequest, SignupRequest}
 import com.social.network.services.AuthenticationService
 import org.http4s.circe.CirceEntityCodec.circeEntityEncoder

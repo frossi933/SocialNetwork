@@ -6,6 +6,8 @@ import com.social.network.model.Post.PostId
 import com.social.network.model.Comment
 import com.social.network.model.Comment.CommentId
 import com.social.network.model.User.UserId
+import com.social.network.utils.Sorting
+import doobie.Fragment
 import doobie.implicits._
 import doobie.postgres.implicits._
 
@@ -33,12 +35,13 @@ object CommentsRepositoryDB {
         .option
         .transact(config.xa)
 
-    override def getCommentsByPostId(postId: PostId): F[List[Comment]] =
-      sql"""
+    override def getCommentsByPostId(postId: PostId, sorting: Sorting): F[List[Comment]] =
+      (fr"""
         select id, post_id, author_id, text, timestamp
         from comments
-        where post_id = $postId order by timestamp asc
-      """.query[Comment]
+        where post_id = $postId
+      """ ++ Fragment.const(Utils.sortingFragment("timestamp", "id", sorting)))
+        .query[Comment]
         .to[List]
         .transact(config.xa)
 

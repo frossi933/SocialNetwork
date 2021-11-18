@@ -24,7 +24,7 @@ object SocialNetworkServer {
     val postsRepo = PostsRepositoryCompressionWrapper(PostsRepositoryDB(dbConfig))
     val commentsRepo = CommentsRepositoryDB(dbConfig)
     val authService = AuthenticationServiceCookies[F](usersRepo)
-    val profileService = ProfileServiceImpl(postsRepo, commentsRepo)
+    val profileService = ProfileServiceImpl(postsRepo)
     val postsService = PostsServiceImpl(postsRepo, commentsRepo)
 
     val middleware: AuthMiddleware[F, User] =

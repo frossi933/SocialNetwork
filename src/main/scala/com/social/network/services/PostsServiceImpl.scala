@@ -6,6 +6,7 @@ import com.social.network.model.Comment.CommentId
 import com.social.network.model.{Comment, Post, User}
 import com.social.network.repositories.{CommentsRepository, PostsRepository}
 import com.social.network.requests.{AddCommentRequest, AddPostRequest}
+import com.social.network.utils.Sorting
 import com.social.network.validations.{CommentNotFound, CommentValidator, PostNotFound, PostValidator, ValidationError, Validator}
 import com.social.network.validations.Validator.ValidationResult
 
@@ -15,8 +16,8 @@ object PostsServiceImpl {
 
   def apply[F[_]: MonadThrow](postsRepo: PostsRepository[F], commentsRepo: CommentsRepository[F]): PostsService[F] = new PostsService[F] {
 
-    override def getAllPosts(): F[ValidationResult[List[Post]]] =
-      postsRepo.getAll().map(_.validNec[ValidationError])
+    override def getAllPosts(sorting: Sorting): F[ValidationResult[List[Post]]] =
+      postsRepo.getAll(sorting).map(_.validNec[ValidationError])
 
     override def addPost(addPostRequest: AddPostRequest, user: User): F[ValidationResult[Post]] =
       PostValidator.validateAddPostRequest(addPostRequest).map { addPostRequest =>
@@ -31,14 +32,16 @@ object PostsServiceImpl {
     override def updatePost(postRequest: Post, postId: Post.PostId, user: User): F[ValidationResult[Post]] =
       postsRepo.getPostById(postId).map { maybePost =>
         Validator.validateIsDefined(maybePost, PostNotFound).andThen { post =>
-          PostValidator.validatePostsMatchIdAndAuthor(postRequest, post)
+          PostValidator.validatePostsMatch(postRequest, post).andThen { post =>
+            PostValidator.validatePostAuthor(post, user)
+          }
         }
       }.flatMap(_.map(postsRepo.savePost).sequence)
 
-    override def getPostComments(postId: Post.PostId): F[ValidationResult[List[Comment]]] =
+    override def getPostComments(postId: Post.PostId, sorting: Sorting): F[ValidationResult[List[Comment]]] =
       postsRepo.getPostById(postId).map { maybePost =>
         Validator.validateIsDefined(maybePost, PostNotFound)
-      }.flatMap(_.map(post => commentsRepo.getCommentsByPostId(post.id)).sequence)
+      }.flatMap(_.map(post => commentsRepo.getCommentsByPostId(post.id, sorting)).sequence)
 
     override def getPostComment(postId: Post.PostId, commentId: CommentId): F[ValidationResult[Comment]] =
       for {

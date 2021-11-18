@@ -5,6 +5,8 @@ import com.social.network.config.DBConfig
 import com.social.network.model.Post
 import com.social.network.model.Post.PostId
 import com.social.network.model.User.UserId
+import com.social.network.utils.Sorting
+import doobie.Fragment
 import doobie.implicits._
 import doobie.postgres.implicits._
 
@@ -31,20 +33,23 @@ object PostsRepositoryDB {
         .option
         .transact(config.xa)
 
-    override def getPostsByAuthorId(authorId: UserId): F[List[Post]] =
-      sql"""
+    override def getPostsByAuthorId(authorId: UserId, sorting: Sorting): F[List[Post]] = {
+      (fr"""
         select id, author_id, text, image, timestamp
         from posts
         where author_id = $authorId
-      """.query[Post]
+      """ ++ Fragment.const(Utils.sortingFragment("timestamp", "id", sorting)))
+        .query[Post]
         .to[List]
         .transact(config.xa)
+    }
 
-    override def getAll(): F[List[Post]] =
-      sql"""
+    override def getAll(sorting: Sorting): F[List[Post]] =
+      (fr"""
         select id, author_id, text, image, timestamp
         from posts
-      """.query[Post]
+      """ ++ Fragment.const(Utils.sortingFragment("timestamp", "id", sorting)))
+        .query[Post]
         .to[List]
         .transact(config.xa)
 

@@ -37,7 +37,7 @@ object PostValidator {
      validatePostImage(addPostRequest.image))
     .mapN(AddPostRequest.apply)
 
-  def validatePostsMatchIdAndAuthor(postA: Post, postB: Post): ValidationResult[Post] =
+  def validatePostsMatch(postA: Post, postB: Post): ValidationResult[Post] =
     Validator.cond(
       postA.id == postB.id && postA.authorId == postB.authorId,
       postA,

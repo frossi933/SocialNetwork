@@ -15,18 +15,10 @@ object Validator {
     if(condition) valid.validNec else invalid.invalidNec
 
   def validateIsDefined[A](maybeA: Option[A], validationError: NotFoundValidationError): ValidationResult[A] =
-    Validator.cond(
-      maybeA.isDefined,
-      maybeA.get,
-      validationError
-    )
+    if(maybeA.isDefined) maybeA.get.validNec else validationError.invalidNec
 
   def validateIsNotDefined[A](maybeA: Option[A], validationError: BadRequestValidationError): ValidationResult[Option[A]] =
-    Validator.cond(
-      maybeA.isEmpty,
-      maybeA,
-      validationError
-    )
+    if(maybeA.isEmpty) maybeA.validNec else validationError.invalidNec
 
   implicit class ValidationResultOps[F[_]: Monad, A](vr: F[ValidationResult[A]]) {
     val dsl = new Http4sDsl[F]{}

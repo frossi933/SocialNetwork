@@ -1,11 +1,12 @@
-package com.social.network.model
+package com.social.network.dto
 
 import cats.effect.Sync
+import com.social.network.model.User
 import com.social.network.model.User.UserId
-import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import org.http4s.{EntityDecoder, EntityEncoder}
+import io.circe.{Decoder, Encoder}
 import org.http4s.circe.{jsonEncoderOf, jsonOf}
+import org.http4s.{EntityDecoder, EntityEncoder}
 
 case class UserDTO(id: UserId, email: String, name: String)
 
