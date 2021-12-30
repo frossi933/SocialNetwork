@@ -1,32 +1,41 @@
 package com.social.network.model
 
 import cats.effect.Sync
-import com.social.network.model.Comment.CommentId
 import com.social.network.model.Post.PostId
 import com.social.network.model.User.UserId
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.{Decoder, Encoder, KeyDecoder, KeyEncoder}
+import io.circe.generic.semiauto._
+import io.estatico.newtype.Coercible
+import io.estatico.newtype.ops.toCoercibleIdOps
 import org.http4s.circe.{jsonEncoderOf, jsonOf}
 import org.http4s.{EntityDecoder, EntityEncoder}
 
 import java.time.Instant
 
-
-case class Comment(id: CommentId, postId: PostId, authorId: UserId, text: String, timestamp: Instant)
+case class Comment(id: CommentId, postId: PostId, authorId: UserId, text: CommentText, timestamp: Instant)
 
 object Comment {
 
-  final case class CommentId(id: Int) extends AnyVal
+  implicit def coercibleDecoder[
+    A: Coercible[B, *],
+    B: Decoder
+  ]: Decoder[A] = Decoder[B].map(_.coerce[A])
+  implicit def coercibleEncoder[
+    A: Coercible[*, B],
+    B: Encoder
+  ]: Encoder[A] = Encoder[B].contramap(_.coerce[B])
+  implicit def coercibleKeyDecoder[A: Coercible[B, *], B: KeyDecoder]
+  : KeyDecoder[A] =
+    KeyDecoder[B].map(_.coerce[A])
 
-  import com.social.network.model.User.{userIdDecoder, userIdEncoder}
-  import com.social.network.model.Post.{postIdDecoder, postIdEncoder}
+  implicit def coercibleKeyEncoder[A: Coercible[*, B], B: KeyEncoder]
+  : KeyEncoder[A] =
+    KeyEncoder[B].contramap[A](_.coerce[B])
 
-  implicit val commentIdDecoder: Decoder[CommentId] = deriveDecoder
-  implicit val commentDecoder: Decoder[Comment] = deriveDecoder
+  implicit val commentDecoder: Decoder[Comment] = deriveDecoder[Comment]
   implicit def commentEntityDecoder[F[_]: Sync]: EntityDecoder[F, Comment] =
     jsonOf
-  implicit val commentIdEncoder: Encoder[CommentId] = deriveEncoder
-  implicit val commentEncoder: Encoder[Comment] = deriveEncoder
+  implicit val commentEncoder: Encoder[Comment] = deriveEncoder[Comment]
   implicit def commentEntityEncoder[F[_]]: EntityEncoder[F, Comment] =
     jsonEncoderOf
 }

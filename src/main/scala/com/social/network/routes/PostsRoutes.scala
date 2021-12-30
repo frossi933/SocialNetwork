@@ -2,9 +2,8 @@ package com.social.network.routes
 
 import cats.implicits._
 import cats.effect.Sync
-import com.social.network.model.Comment.CommentId
 import com.social.network.model.Post.PostId
-import com.social.network.model.{Post, User}
+import com.social.network.model.{CommentId, Post, User}
 import com.social.network.requests.{AddCommentRequest, AddPostRequest}
 import com.social.network.services.PostsService
 import com.social.network.utils.Sorting

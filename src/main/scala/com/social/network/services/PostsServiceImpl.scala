@@ -2,8 +2,7 @@ package com.social.network.services
 
 import cats.implicits._
 import cats.MonadThrow
-import com.social.network.model.Comment.CommentId
-import com.social.network.model.{Comment, Post, User}
+import com.social.network.model.{Comment, CommentId, Post, User}
 import com.social.network.repositories.{CommentsRepository, PostsRepository}
 import com.social.network.requests.{AddCommentRequest, AddPostRequest}
 import com.social.network.utils.Sorting

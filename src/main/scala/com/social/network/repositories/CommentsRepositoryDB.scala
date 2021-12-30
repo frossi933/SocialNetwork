@@ -3,8 +3,7 @@ package com.social.network.repositories
 import cats.effect.Bracket
 import com.social.network.config.DBConfig
 import com.social.network.model.Post.PostId
-import com.social.network.model.Comment
-import com.social.network.model.Comment.CommentId
+import com.social.network.model.{Comment, CommentId}
 import com.social.network.model.User.UserId
 import com.social.network.utils.Sorting
 import doobie.Fragment
@@ -15,6 +14,10 @@ import doobie.postgres.implicits._
 trait CommentsRepositoryDB[F[_]] extends CommentsRepository[F]
 
 object CommentsRepositoryDB {
+
+  //implicit def newTypePut[N: Coercible[*, R], R: Put]: Put[N] = Put[R].contramap[N](_.coerce[R])
+
+  //implicit def newTypeRead[N: Coercible[R, *], R: Read]: Read[N] = Read[R].map(_.coerce[N])
 
   def apply[F[_]](config: DBConfig[F])(implicit ev: Bracket[F, Throwable]): CommentsRepositoryDB[F] = new CommentsRepositoryDB[F] {
 
