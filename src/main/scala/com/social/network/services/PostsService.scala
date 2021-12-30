@@ -1,7 +1,6 @@
 package com.social.network.services
 
-import com.social.network.model.Post.PostId
-import com.social.network.model.{Comment, CommentId, Post, User}
+import com.social.network.model.{Comment, CommentId, Post, PostId, User}
 import com.social.network.requests.{AddCommentRequest, AddPostRequest}
 import com.social.network.utils.Sorting
 import com.social.network.validations.Validator.ValidationResult

@@ -2,8 +2,7 @@ package com.social.network.routes
 
 import cats.effect.Sync
 import com.social.network.dto.UserDTO
-import com.social.network.model.Post.PostId
-import com.social.network.model.User
+import com.social.network.model.{PostId, User}
 import com.social.network.routes.PostsRoutes.SortQueryParamMatcher
 import com.social.network.services.{PostsService, ProfileService}
 import com.social.network.utils.Sorting

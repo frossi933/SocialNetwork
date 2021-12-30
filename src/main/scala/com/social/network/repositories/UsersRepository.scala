@@ -1,7 +1,6 @@
 package com.social.network.repositories
 
-import com.social.network.model.User
-import com.social.network.model.User.UserId
+import com.social.network.model.{User, UserId}
 
 
 trait UsersRepository[F[_]] {

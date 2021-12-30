@@ -2,7 +2,7 @@ package com.social.network.repositories
 
 import cats.effect.Bracket
 import com.social.network.config.DBConfig
-import com.social.network.model.User
+import com.social.network.model.{User, UserId}
 import doobie.implicits._
 
 trait UsersRepositoryDB[F[_]] extends UsersRepository[F]
@@ -19,7 +19,7 @@ object UsersRepositoryDB {
         .withUniqueGeneratedKeys[User]("id", "email", "name", "password", "active")
         .transact(config.xa)
 
-    override def getUserById(userId: User.UserId): F[Option[User]] =
+    override def getUserById(userId: UserId): F[Option[User]] =
       sql"""
         select id, email, name, password, active
         from users

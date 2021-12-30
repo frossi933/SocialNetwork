@@ -2,7 +2,7 @@ package com.social.network.repositories
 
 import cats.implicits._
 import cats.MonadThrow
-import com.social.network.model.{Post, User}
+import com.social.network.model.{Post, PostId, UserId}
 import com.social.network.utils.{ImageCompressor, Sorting}
 
 import java.io.IOException
@@ -13,15 +13,15 @@ object PostsRepositoryCompressionWrapper {
 
   def apply[F[_]](base: PostsRepository[F])(implicit ev: MonadThrow[F]): PostsRepository[F] = new PostsRepositoryCompressionWrapper[F] {
 
-    override def createPost(authorId: User.UserId, maybeText: Option[String], image: Array[Byte]): F[Post] =
+    override def createPost(authorId: UserId, maybeText: Option[String], image: Array[Byte]): F[Post] =
       ImageCompressor.compress[F](image).flatMap { imageProcessed =>
         base.createPost(authorId, maybeText, imageProcessed)
       }
 
-    override def getPostById(id: Post.PostId): F[Option[Post]] =
+    override def getPostById(id: PostId): F[Option[Post]] =
       base.getPostById(id).flatMap(_.map(decompressPost).sequence)
 
-    override def getPostsByAuthorId(authorId: User.UserId, sorting: Sorting): F[List[Post]] =
+    override def getPostsByAuthorId(authorId: UserId, sorting: Sorting): F[List[Post]] =
       base.getPostsByAuthorId(authorId, sorting).flatMap(decompressPosts)
 
     override def getAll(sorting: Sorting): F[List[Post]] =

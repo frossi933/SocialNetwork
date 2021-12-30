@@ -1,8 +1,6 @@
 package com.social.network.repositories
 
-import com.social.network.model.Post
-import com.social.network.model.Post.PostId
-import com.social.network.model.User.UserId
+import com.social.network.model.{Post, UserId, PostId}
 import com.social.network.utils.Sorting
 
 

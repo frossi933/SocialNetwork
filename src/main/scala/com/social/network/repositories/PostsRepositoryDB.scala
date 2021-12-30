@@ -2,9 +2,7 @@ package com.social.network.repositories
 
 import cats.effect.Bracket
 import com.social.network.config.DBConfig
-import com.social.network.model.Post
-import com.social.network.model.Post.PostId
-import com.social.network.model.User.UserId
+import com.social.network.model.{Post, PostId, UserId}
 import com.social.network.utils.Sorting
 import doobie.Fragment
 import doobie.implicits._
